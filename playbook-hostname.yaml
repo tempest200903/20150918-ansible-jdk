@@ -1,0 +1,9 @@
+---
+
+- hosts: group-bodais-dev
+  become: yes
+  tasks: 
+    - name: hostname
+      command: 'hostname '
+    - name: whoami
+      command: 'whoami '

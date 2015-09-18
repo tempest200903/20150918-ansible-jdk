@@ -1,0 +1,14 @@
+---
+
+- hosts: group-bodais-dev
+  become: yes
+  remote_user: tomcat
+  vars:
+    JENV_DEST: /home/tomcat/.jenv
+    BASH_PROFILE: /home/tomcat/.bash_profile
+  tasks: 
+    - name: copy
+      copy: src=install-jenv.sh dest=/home/tomcat
+    - name: shell
+      shell: install-jenv.sh
+

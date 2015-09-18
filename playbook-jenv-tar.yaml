@@ -1,0 +1,22 @@
+---
+
+- hosts: group-bodais-dev
+  become: yes
+  vars:
+    JENV_DEST: /home/tomcat/.jenv
+    BASH_PROFILE: /home/tomcat/.bash_profile
+  tasks: 
+    - name: dest
+      file: path={{JENV_DEST}} state=directory
+    - name: unarchive
+      unarchive: src=jenv.tgz dest={{JENV_DEST}}
+    - name: before ln
+      file: path={{JENV_DEST}}/bin/jenv state=absent
+    - name: ln
+      shell: ln -s {{JENV_DEST}}/libexec/jenv {{JENV_DEST}}/bin/
+    - name: file 
+      file: path={{JENV_DEST}} owner=tomcat group=bodais mode=0644 recurse=yes
+    - name: file directory
+      file: path={{JENV_DEST}} owner=tomcat group=bodais mode=0755
+    - name: bash_profile
+      shell: echo 'export PATH="$HOME/.jenv/bin:$PATH"; eval "$(jenv init -)"' >> {{BASH_PROFILE}}

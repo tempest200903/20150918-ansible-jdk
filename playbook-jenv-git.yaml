@@ -1,0 +1,15 @@
+---
+
+- hosts: group-bodais-dev
+  remote_user: tomcat
+  vars:
+    JENV_DEST: /home/tomcat/.jenv
+    BASH_PROFILE: /home/tomcat/.bash_profile
+  tasks: 
+    - name: git
+      yum: name=git state=latest
+    - name: jenv
+      git: repo=https://github.com/gcuisinier/jenv.git
+           dest={{JENV_DEST}} force=yes
+    - name: bash_profile
+      shell: echo 'export PATH="$HOME/.jenv/bin:$PATH"; eval "$(jenv init -)"' >> {{BASH_PROFILE}}

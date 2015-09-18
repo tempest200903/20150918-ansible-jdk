@@ -1,0 +1,16 @@
+---
+
+- hosts: all
+  become: yes
+  vars:
+    JAVA_DL_URL: http://download.oracle.com/otn-pub/java/jdk/8u5-b13/jdk-8u5-linux-x64.rpm
+    JAVA_DL_PATH: /usr/local/src/jdk-8u5-linux-x64.rpm
+  tasks:
+    - name: prepare wget
+      yum: name=wget state=present
+    - name: download oracle jdk 1.8
+      command: 'wget -q -O {{JAVA_DL_PATH}} --no-cookies --no-check-certificate --header "Cookie: oraclelicense=accept-securebackup-cookie" {{JAVA_DL_URL}} creates={{JAVA_DL_PATH}}'
+      poll: 10
+    - name: install oracle jdk
+      yum: name={{JAVA_DL_PATH}}
+
