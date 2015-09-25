@@ -1,9 +1,19 @@
-ansible-playbook-jdk:
+ansible-playbook-jdk: ansible-ping
 	ansible-playbook -i hosts playbook-jdk.yaml -s ; echo ES $?
 
-ansible-ping: 
+ansible-ping: .make.ansible.available
 	ansible -i hosts 192.168.33.14 -m ping
 	ansible -i hosts 211.17.181.228 -m ping || make when-fail-ansible-ping
+
+.make.ansible.available: 
+	which ansible && date > .make.ansible.available || ( echo "NEXT ACTION: make .make.install.ansible" ; false )
+
+.make.install.ansible: 
+	which yum
+	sudo yum -y install ansible
+	ansible --version
+	which ansible
+	date > .make.install.ansible
 
 when-fail-ansible-ping: 
 	make about-paramiko
